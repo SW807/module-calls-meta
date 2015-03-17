@@ -1,0 +1,14 @@
+{
+  "name": "module_calls_meta",
+  "_version": 0.000000000000000000000000000001,
+  "tables": [
+    {
+      "name": "call_history",
+      "columns": [
+        { "name": "caller", "dataType": "TEXT"},
+        { "name": "call_length", "dataType": "REAL"},
+        { "name": "isIncoming", "dataType": "INTEGER"}
+      ]
+    }
+  ]
+}
