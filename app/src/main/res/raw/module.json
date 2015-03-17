@@ -8,7 +8,7 @@
         { "name": "caller", "dataType": "TEXT"},
         { "name": "call_length", "dataType": "REAL"},
         { "name": "isIncoming", "dataType": "INTEGER"},
-		{ "name": "missed", "dataType": "INTEGER"}
+		{ "name": "answered", "dataType": "INTEGER"}
       ]
     }
   ]
