@@ -12,5 +12,9 @@
 		{ "name": "answered", "dataType": "INTEGER"}
       ]
     }
-  ]
+  ],
+  "task": {
+    "type": "scheduled",
+    "value": "03:00"
+  }
 }
