@@ -5,7 +5,7 @@ android {
     buildToolsVersion "21.1.2"
 
     defaultConfig {
-        applicationId "dk.aau.cs.psylog.module_calls_meta"
+        applicationId "dk.aau.cs.psylog.sensor.module_calls_meta"
         minSdkVersion 18
         targetSdkVersion 21
         versionCode 1
