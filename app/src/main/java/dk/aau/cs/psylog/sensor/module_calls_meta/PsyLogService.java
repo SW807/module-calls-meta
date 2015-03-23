@@ -4,8 +4,8 @@ import dk.aau.cs.psylog.module_lib.ScheduledService;
 
 public class PsyLogService extends ScheduledService {
 
-    public PsyLogService(String name) {
-        super(name);
+    public PsyLogService() {
+        super("PsyLogIntentService");
     }
 
     @Override
