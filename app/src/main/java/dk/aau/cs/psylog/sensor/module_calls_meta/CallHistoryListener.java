@@ -18,7 +18,7 @@ public class CallHistoryListener implements IScheduledTask {
 
     private ContentResolver contentResolver;
     private String[] callLogColumnProjection = {CallLog.Calls.CACHED_FORMATTED_NUMBER, CallLog.Calls.DATE, CallLog.Calls.DURATION, CallLog.Calls.TYPE};
-    private static final String TABLE_NAME = "call_history";
+    private static final String TABLE_NAME = "MODULE_CALLS_META_call_history";
 
     public CallHistoryListener(Context context)
     {
@@ -30,7 +30,11 @@ public class CallHistoryListener implements IScheduledTask {
         Cursor cursor = contentResolver.query(Uri.parse(DBAccessContract.DBACCESS_CONTENTPROVIDER + TABLE_NAME), new String[]{"MAX(" + CallLog.Calls.DATE + ")"}, null, null, CallLog.Calls.DATE + " DESC");
         if (cursor != null) {
             cursor.moveToFirst();
-            return cursor.getInt(cursor.getColumnIndex(CallLog.Calls.DATE));
+            int col = cursor.getColumnIndex("date");
+            if (col > 0)
+                return cursor.getInt(col);
+            else
+                return 0;
         }
         else
             return 0;
@@ -39,7 +43,7 @@ public class CallHistoryListener implements IScheduledTask {
     @Override
     public void doTask() {
         ContentValues contentValues = new ContentValues();
-        Cursor callLogCursor = contentResolver.query(CallLog.CONTENT_URI, callLogColumnProjection, CallLog.Calls.DATE + " > ?", new String[]{Integer.toString(getTime())}, null);
+        Cursor callLogCursor = contentResolver.query(CallLog.Calls.CONTENT_URI, callLogColumnProjection, CallLog.Calls.DATE + " > ?", new String[]{Integer.toString(getTime())}, null);
         if (callLogCursor != null) {
             while (callLogCursor.moveToNext()) {
                 contentValues.put("caller", callLogCursor.getString(callLogCursor.getColumnIndex(CallLog.Calls.CACHED_FORMATTED_NUMBER)));
