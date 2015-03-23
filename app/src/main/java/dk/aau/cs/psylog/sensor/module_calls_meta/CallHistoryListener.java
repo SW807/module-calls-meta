@@ -9,13 +9,15 @@ import android.net.Uri;
 import android.provider.CallLog;
 import android.util.Log;
 
+import java.util.Date;
+
 import dk.aau.cs.psylog.module_lib.DBAccessContract;
 import dk.aau.cs.psylog.module_lib.IScheduledTask;
 
 public class CallHistoryListener implements IScheduledTask {
 
     private ContentResolver contentResolver;
-    private String[] callLogColumnProjection = {CallLog.Calls.CACHED_NAME, CallLog.Calls.DATE, CallLog.Calls.DURATION, CallLog.Calls.TYPE};
+    private String[] callLogColumnProjection = {CallLog.Calls.CACHED_FORMATTED_NUMBER, CallLog.Calls.DATE, CallLog.Calls.DURATION, CallLog.Calls.TYPE};
     private static final String TABLE_NAME = "call_history";
 
     public CallHistoryListener(Context context)
@@ -40,7 +42,7 @@ public class CallHistoryListener implements IScheduledTask {
         Cursor callLogCursor = contentResolver.query(CallLog.CONTENT_URI, callLogColumnProjection, CallLog.Calls.DATE + " > ?", new String[]{Integer.toString(getTime())}, null);
         if (callLogCursor != null) {
             while (callLogCursor.moveToNext()) {
-                contentValues.put("caller", callLogCursor.getString(callLogCursor.getColumnIndex(CallLog.Calls.CACHED_NAME)));
+                contentValues.put("caller", callLogCursor.getString(callLogCursor.getColumnIndex(CallLog.Calls.CACHED_FORMATTED_NUMBER)));
                 contentValues.put("date", callLogCursor.getString(callLogCursor.getColumnIndex(CallLog.Calls.DATE)));
                 contentValues.put("length", callLogCursor.getString(callLogCursor.getColumnIndex(CallLog.Calls.DURATION)));
                 switch (callLogCursor.getInt(callLogCursor.getColumnIndex(CallLog.Calls.TYPE))) {

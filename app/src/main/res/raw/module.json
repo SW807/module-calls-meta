@@ -5,7 +5,7 @@
     {
       "name": "call_history",
       "columns": [
-        { "name": "caller", "dataType": "TEXT"},
+        { "name": "caller", "dataType": "TEXT", "_unit": "Caller number"},
 		{ "name": "date", "dataType": "INTEGER"},
         { "name": "length", "dataType": "REAL"},
         { "name": "incoming", "dataType": "INTEGER"},
