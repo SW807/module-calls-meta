@@ -18,7 +18,14 @@ public class CallHistoryListener implements IScheduledTask {
 
     private ContentResolver contentResolver;
     private String[] callLogColumnProjection = {CallLog.Calls.CACHED_FORMATTED_NUMBER, CallLog.Calls.DATE, CallLog.Calls.DURATION, CallLog.Calls.TYPE};
-    private static final String TABLE_NAME = "MODULE_CALLS_META_call_history";
+    private static final String TABLE_NAME = "call_history";
+    private static final String MODULE_NAME = "module_calls_meta";
+
+    private static final String CALLER = "caller";
+    private static final String DATE = "date";
+    private static final String LENGTH = "length";
+    private static final String INCOMING = "incoming";
+    private static final String ANSWERED = "answered";
 
     public CallHistoryListener(Context context)
     {
@@ -27,7 +34,7 @@ public class CallHistoryListener implements IScheduledTask {
 
     private long getTime()
     {
-        Cursor cursor = contentResolver.query(Uri.parse(DBAccessContract.DBACCESS_CONTENTPROVIDER + TABLE_NAME), new String[]{"MAX(date)"}, null, null, null);
+        Cursor cursor = contentResolver.query(Uri.parse(DBAccessContract.DBACCESS_CONTENTPROVIDER + MODULE_NAME + "_" + TABLE_NAME), new String[]{"MAX(" + DATE + ")"}, null, null, null);
         if (cursor != null && cursor.moveToFirst()) {
             return cursor.getLong(0);
         }
@@ -40,13 +47,13 @@ public class CallHistoryListener implements IScheduledTask {
         Cursor callLogCursor = contentResolver.query(CallLog.Calls.CONTENT_URI, callLogColumnProjection, CallLog.Calls.DATE + " > ?", new String[]{Long.toString(getTime())}, null);
         if (callLogCursor != null) {
             while (callLogCursor.moveToNext()) {
-                contentValues.put("caller", callLogCursor.getString(callLogCursor.getColumnIndex(CallLog.Calls.CACHED_FORMATTED_NUMBER)));
-                contentValues.put("date", callLogCursor.getString(callLogCursor.getColumnIndex(CallLog.Calls.DATE)));
-                contentValues.put("length", callLogCursor.getString(callLogCursor.getColumnIndex(CallLog.Calls.DURATION)));
+                contentValues.put(CALLER, callLogCursor.getString(callLogCursor.getColumnIndex(CallLog.Calls.CACHED_FORMATTED_NUMBER)));
+                contentValues.put(DATE, callLogCursor.getString(callLogCursor.getColumnIndex(CallLog.Calls.DATE)));
+                contentValues.put(LENGTH, callLogCursor.getString(callLogCursor.getColumnIndex(CallLog.Calls.DURATION)));
                 switch (callLogCursor.getInt(callLogCursor.getColumnIndex(CallLog.Calls.TYPE))) {
-                    case CallLog.Calls.INCOMING_TYPE: contentValues.put("incoming", 1); contentValues.put("answered", 0); break;
-                    case CallLog.Calls.OUTGOING_TYPE: contentValues.put("incoming", 0); contentValues.put("answered", 0); break;
-                    case CallLog.Calls.MISSED_TYPE: contentValues.put("answered", 0); contentValues.put("incoming", 1); break;
+                    case CallLog.Calls.INCOMING_TYPE: contentValues.put(INCOMING, 1); contentValues.put(ANSWERED, 0); break;
+                    case CallLog.Calls.OUTGOING_TYPE: contentValues.put(INCOMING, 0); contentValues.put(ANSWERED, 0); break;
+                    case CallLog.Calls.MISSED_TYPE: contentValues.put(ANSWERED, 0); contentValues.put(INCOMING, 1); break;
                     default: Log.d("module_calls_meta", "Unknown CallLog.Calls.TYPE.");
                 }
                 contentResolver.insert(Uri.parse(DBAccessContract.DBACCESS_CONTENTPROVIDER + TABLE_NAME), contentValues);
