@@ -28,8 +28,9 @@ public class CallHistoryListener implements IScheduledTask {
     private long getTime()
     {
         Cursor cursor = contentResolver.query(Uri.parse(DBAccessContract.DBACCESS_CONTENTPROVIDER + TABLE_NAME), new String[]{"MAX(date)"}, null, null, null);
-        if (cursor != null && cursor.moveToFirst())
+        if (cursor != null && cursor.moveToFirst()) {
             return cursor.getLong(0);
+        }
         return 0;
     }
 
@@ -48,9 +49,9 @@ public class CallHistoryListener implements IScheduledTask {
                     case CallLog.Calls.MISSED_TYPE: contentValues.put("answered", 0); contentValues.put("incoming", 1); break;
                     default: Log.d("module_calls_meta", "Unknown CallLog.Calls.TYPE.");
                 }
+                contentResolver.insert(Uri.parse(DBAccessContract.DBACCESS_CONTENTPROVIDER + TABLE_NAME), contentValues);
             }
         }
-        contentResolver.insert(Uri.parse(DBAccessContract.DBACCESS_CONTENTPROVIDER + TABLE_NAME), contentValues);
     }
 
     @Override
