@@ -25,25 +25,18 @@ public class CallHistoryListener implements IScheduledTask {
         contentResolver = context.getContentResolver();
     }
 
-    private int getTime()
+    private long getTime()
     {
-        Cursor cursor = contentResolver.query(Uri.parse(DBAccessContract.DBACCESS_CONTENTPROVIDER + TABLE_NAME), new String[]{"MAX(" + CallLog.Calls.DATE + ")"}, null, null, CallLog.Calls.DATE + " DESC");
-        if (cursor != null) {
-            cursor.moveToFirst();
-            int col = cursor.getColumnIndex("date");
-            if (col > 0)
-                return cursor.getInt(col);
-            else
-                return 0;
-        }
-        else
-            return 0;
+        Cursor cursor = contentResolver.query(Uri.parse(DBAccessContract.DBACCESS_CONTENTPROVIDER + TABLE_NAME), new String[]{"MAX(date)"}, null, null, null);
+        if (cursor != null && cursor.moveToFirst())
+            return cursor.getLong(0);
+        return 0;
     }
 
     @Override
     public void doTask() {
         ContentValues contentValues = new ContentValues();
-        Cursor callLogCursor = contentResolver.query(CallLog.Calls.CONTENT_URI, callLogColumnProjection, CallLog.Calls.DATE + " > ?", new String[]{Integer.toString(getTime())}, null);
+        Cursor callLogCursor = contentResolver.query(CallLog.Calls.CONTENT_URI, callLogColumnProjection, CallLog.Calls.DATE + " > ?", new String[]{Long.toString(getTime())}, null);
         if (callLogCursor != null) {
             while (callLogCursor.moveToNext()) {
                 contentValues.put("caller", callLogCursor.getString(callLogCursor.getColumnIndex(CallLog.Calls.CACHED_FORMATTED_NUMBER)));
