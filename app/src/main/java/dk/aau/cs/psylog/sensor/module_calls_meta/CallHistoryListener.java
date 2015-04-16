@@ -56,7 +56,7 @@ public class CallHistoryListener implements IScheduledTask {
                     case CallLog.Calls.MISSED_TYPE: contentValues.put(ANSWERED, 0); contentValues.put(INCOMING, 1); break;
                     default: Log.d("module_calls_meta", "Unknown CallLog.Calls.TYPE.");
                 }
-                contentResolver.insert(Uri.parse(DBAccessContract.DBACCESS_CONTENTPROVIDER + TABLE_NAME), contentValues);
+                contentResolver.insert(Uri.parse(DBAccessContract.DBACCESS_CONTENTPROVIDER + MODULE_NAME + "_" + TABLE_NAME), contentValues);
             }
         }
     }
