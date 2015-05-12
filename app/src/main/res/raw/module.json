@@ -5,11 +5,11 @@
     {
       "name": "call_history",
       "columns": [
-        { "name": "caller", "dataType": "TEXT", "_unit": "Caller number"},
-		{ "name": "date", "dataType": "INTEGER"},
-        { "name": "length", "dataType": "REAL"},
-        { "name": "incoming", "dataType": "INTEGER"},
-		{ "name": "answered", "dataType": "INTEGER"}
+        { "name": "caller", "dataType": "TEXT", "_unit": "Caller number." },
+        { "name": "date", "dataType": "INTEGER", "_unit": "Timestamp." },
+        { "name": "length", "dataType": "REAL", "_unit": "Duration in seconds."  },
+        { "name": "incoming", "dataType": "INTEGER", "_unit": "boolean", "_info": "True if the call was incoming." },
+        { "name": "answered", "dataType": "INTEGER", "_unit": "boolean", "_info": "True if the call was answered." }
       ]
     }
   ],
