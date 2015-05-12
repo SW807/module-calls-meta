@@ -51,9 +51,9 @@ public class CallHistoryListener implements IScheduledTask {
                 contentValues.put(DATE, callLogCursor.getString(callLogCursor.getColumnIndex(CallLog.Calls.DATE)));
                 contentValues.put(LENGTH, callLogCursor.getString(callLogCursor.getColumnIndex(CallLog.Calls.DURATION)));
                 switch (callLogCursor.getInt(callLogCursor.getColumnIndex(CallLog.Calls.TYPE))) {
-                    case CallLog.Calls.INCOMING_TYPE: contentValues.put(INCOMING, 1); contentValues.put(ANSWERED, 0); break;
-                    case CallLog.Calls.OUTGOING_TYPE: contentValues.put(INCOMING, 0); contentValues.put(ANSWERED, 0); break;
-                    case CallLog.Calls.MISSED_TYPE: contentValues.put(ANSWERED, 0); contentValues.put(INCOMING, 1); break;
+                    case CallLog.Calls.INCOMING_TYPE: contentValues.put(INCOMING, true); contentValues.put(ANSWERED, false); break;
+                    case CallLog.Calls.OUTGOING_TYPE: contentValues.put(INCOMING, false); contentValues.put(ANSWERED, false); break;
+                    case CallLog.Calls.MISSED_TYPE: contentValues.put(ANSWERED, false); contentValues.put(INCOMING, true); break;
                     default: Log.d("module_calls_meta", "Unknown CallLog.Calls.TYPE.");
                 }
                 contentResolver.insert(Uri.parse(DBAccessContract.DBACCESS_CONTENTPROVIDER + MODULE_NAME + "_" + TABLE_NAME), contentValues);
